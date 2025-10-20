@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^20.3.0",
-    "@angular/core": "^20.3.0"
+    "@angular/core": "^20.3.0",
+    "rxjs": "~7.8.0"
   },
     "scripts": {
     "custom-api-types": "npx openapi-typescript-codegen --input http://localhost:3001/docs-json --output ./src/lib/code-gen/custom-api --exportServices false",

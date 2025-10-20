@@ -1,0 +1,39 @@
+.banner-container {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin: 1rem 0;
+    }
+
+    .banner-content {
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 1rem 0;
+      font-weight: 700;
+    }
+
+    p {
+      font-size: 1.125rem;
+      margin: 0;
+      opacity: 0.95;
+    }
+
+    .banner-content a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 600;
+    }
+
+    .banner-content a:hover,
+    .banner-content a:focus {
+      color: #f0f0f0;
+      text-decoration-thickness: 2px;
+    }

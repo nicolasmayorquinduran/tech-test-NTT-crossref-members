@@ -1,0 +1,9 @@
+<div class="banner-container">
+  <div class="banner-content">
+    <h1>{{ bannerTitle }}</h1>
+    <p>{{ bannerMessage }}</p>
+    @if (isAuthenticated) {
+      <a href="#" (click)="onViewWorks($event)">Ver Perfil</a>
+    }
+  </div>
+</div>

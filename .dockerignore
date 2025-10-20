@@ -6,10 +6,12 @@
 !host/
 !login/
 !banner/
-!members/
+!member/
 !libs/
+!nginx.conf
 
 # Exclude node_modules and build artifacts from all projects
+libs/node_modules
 **/node_modules
 **/dist
 **/.angular

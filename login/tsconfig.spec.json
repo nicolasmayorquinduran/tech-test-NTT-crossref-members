@@ -8,11 +8,7 @@
       "jasmine"
     ],
     "baseUrl": ".",
-    "paths": {
-      "shared": [
-        "../libs/projects/shared/src/public-api.ts"
-      ]
-    }
+    
   },
   "include": [
     "src/**/*.ts"

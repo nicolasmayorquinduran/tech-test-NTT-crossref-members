@@ -24,18 +24,27 @@ Este proyecto está compuesto por múltiples aplicaciones independientes:
 
 ```bash
 # Clonar el repositorio
-git clone <url-del-repo>
-cd ntt
+git clone https://github.com/nicolasmayorquinduran/tech-test-NTT-crossref-members.git
+cd tech-test-NTT-crossref-members
 
-# Levantar todos los servicios
-docker-compose up -d
+# Construir la imagen (primera vez tomará varios minutos)
+docker build -t ntt-mfe-app .
 
-# Ver logs de todos los servicios
-docker-compose logs -f
+# Ejecutar el contenedor con todos los servicios
+docker run -d \
+  -p 3001:3001 \
+  -p 4200:4200 \
+  -p 4201:4201 \
+  -p 4202:4202 \
+  -p 4203:4203 \
+  --name ntt-app \
+  ntt-mfe-app
 
-# Ver logs de un servicio específico
-docker-compose logs -f host
+# Ver logs en tiempo real
+docker logs -f ntt-app
 ```
+
+> **Nota:** El primer build puede tardar 5-10 minutos ya que instala dependencias y construye la librería compartida. El contenedor ejecuta todos los servicios en modo desarrollo.
 
 ### Acceder a las aplicaciones
 
@@ -159,11 +168,6 @@ ntt/
 └── README.md
 ```
 
-## 🔐 Credenciales de Prueba
-
-**Usuario:** `admin@crossref.org`  
-**Password:** `admin123`
-
 ## 🌐 Module Federation
 
 Los MFEs se comunican usando:
@@ -179,6 +183,19 @@ Los MFEs se comunican usando:
 - [Banner README](./banner/README.md)
 - [Members README](./members/README.md)
 - [Libs README](./libs/README.md)
+
+## Estructura y Repositorios Individuales (Historial de Commits)
+
+Este proyecto está construido como una arquitectura de Microfrontend (MFE), donde cada componente principal reside en su propio repositorio.
+
+Si deseas inspeccionar el historial de desarrollo detallado (commit history) de cada parte del sistema, puedes visitar sus repositorios individuales a continuación:
+
+- [API](https://github.com/nicolasmayorquinduran/tech-test-NTT-api)
+- [Host](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-host)
+- [Login](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-login)
+- [Banner](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-banner)
+- [Members](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-member)
+- [Libs](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-libs)
 
 ## 🐛 Troubleshooting
 
@@ -203,11 +220,6 @@ docker-compose down
 docker-compose build --no-cache
 docker-compose up -d
 ```
-
-## 📞 Soporte
-
-Para preguntas sobre este proyecto técnico, contacta al equipo de desarrollo.
-
 ---
 
-**Desarrollado con 💙 para NTT Technical Test**
+**Desarrollado con 💙 para NTT**

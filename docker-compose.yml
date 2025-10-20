@@ -1,93 +1,67 @@
-version: '3.8'
-
+# Orquestación para el monorepo de Microfrontends y API
+# Usa el Dockerfile Multietapa para construir cada servicio de forma eficiente.
 services:
+  # 1. API Service (Backend)
   api:
     build:
-      context: ./api
+      context: .
       dockerfile: Dockerfile
-    container_name: ntt-api
+      target: api-runtime # Usa la etapa de ejecución de la API
+      args:
+        APP_NAME: api
     ports:
       - "3001:3001"
-    environment:
-      - PORT=3001
-      - NODE_ENV=production
-    networks:
-      - ntt-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/docs"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    restart: always
 
-  host:
-    build:
-      context: .
-      dockerfile: ./host/Dockerfile
-    container_name: ntt-host
-    ports:
-      - "4200:4200"
-    depends_on:
-      - api
-      - login
-      - banner
-    networks:
-      - ntt-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4200"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
+  # 2. REMOTO: LOGIN
   login:
     build:
       context: .
-      dockerfile: ./login/Dockerfile
-    container_name: ntt-login
+      dockerfile: Dockerfile
+      target: mfe-runtime
+      args:
+        APP_NAME: login
     ports:
-      - "4201:4201"
-    depends_on:
-      - api
-    networks:
-      - ntt-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4201"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - "4201:80"
+    restart: always
 
+  # 3. REMOTO: BANNER
   banner:
     build:
-      context: ./banner
+      context: .
       dockerfile: Dockerfile
-    container_name: ntt-banner
+      target: mfe-runtime
+      args:
+        APP_NAME: banner # Este valor mapea a apps/banner y dist/banner
     ports:
-      - "4202:4202"
-    networks:
-      - ntt-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4202"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - "4202:80"
+    restart: always
 
-  members:
+  # 4. REMOTO: MEMBER
+  member:
     build:
       context: .
-      dockerfile: ./members/Dockerfile
-    container_name: ntt-members
+      dockerfile: Dockerfile
+      target: mfe-runtime
+      args:
+        APP_NAME: member
     ports:
-      - "4203:4203"
-    depends_on:
-      - api
-    networks:
-      - ntt-network
-    healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4203"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - "4203:80"
+    restart: always
 
-networks:
-  ntt-network:
-    driver: bridge
-    name: ntt-mfe-network
+  # 5. HOST - (Contenedor Principal)
+  host:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: mfe-runtime
+      args:
+        APP_NAME: host
+    ports:
+      - "4200:80"
+    depends_on:
+      - api # Dependencia de la API
+      - login
+      - banner
+      - member # Asegúrate de que todos los remotos estén aquí
+    restart: always

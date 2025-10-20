@@ -2,9 +2,15 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
+    "baseUrl": ".",
     "types": [
       "node"
-    ]
+    ],
+    "paths": {
+      "shared": [
+        "../libs/projects/shared/src/public-api.ts"
+      ]
+    }
   },
   "include": [
     "src/**/*.ts"
