@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: ntt-api
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+    networks:
+      - ntt-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3001/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  host:
+    build:
+      context: .
+      dockerfile: ./host/Dockerfile
+    container_name: ntt-host
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+      - login
+      - banner
+    networks:
+      - ntt-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4200"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  login:
+    build:
+      context: .
+      dockerfile: ./login/Dockerfile
+    container_name: ntt-login
+    ports:
+      - "4201:4201"
+    depends_on:
+      - api
+    networks:
+      - ntt-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4201"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  banner:
+    build:
+      context: ./banner
+      dockerfile: Dockerfile
+    container_name: ntt-banner
+    ports:
+      - "4202:4202"
+    networks:
+      - ntt-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4202"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  members:
+    build:
+      context: .
+      dockerfile: ./members/Dockerfile
+    container_name: ntt-members
+    ports:
+      - "4203:4203"
+    depends_on:
+      - api
+    networks:
+      - ntt-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4203"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  ntt-network:
+    driver: bridge
+    name: ntt-mfe-network

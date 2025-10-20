@@ -1,0 +1,41 @@
+# General
+.DS_Store
+*.log
+*.swp
+*.swo
+*~
+
+# Dependencies
+**/node_modules/
+node_modules/
+
+# Build outputs
+**/dist/
+dist/
+**/.angular/
+.angular/
+
+# Editor directories and configs
+**/.vscode/
+.vscode/
+**/.idea/
+.idea/
+**/.editorconfig
+.editorconfig
+
+# Docker
+*.env
+.env.local
+docker-compose.override.yml
+
+# Testing
+**/coverage/
+coverage/
+**/.nyc_output/
+.nyc_output/
+
+# Cache
+**/.cache/
+.cache/
+**/tmp/
+tmp/

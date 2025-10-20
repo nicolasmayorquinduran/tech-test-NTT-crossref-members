@@ -1,0 +1,23 @@
+# Ignore all by default
+*
+
+# Include needed directories
+!api/
+!host/
+!login/
+!banner/
+!members/
+!libs/
+
+# Exclude node_modules and build artifacts from all projects
+**/node_modules
+**/dist
+**/.angular
+**/npm-debug.log
+**/.git
+**/.gitignore
+**/*.md
+**/.vscode
+**/.editorconfig
+**/coverage
+**/.nyc_output
