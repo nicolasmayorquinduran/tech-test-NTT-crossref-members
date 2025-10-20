@@ -1,0 +1,10 @@
+<nav class="navbar">
+  <a class="brand" routerLink="/">Crossref</a>
+  <div class="actions">
+    @if (globalState.isAuthenticated()) {
+      <button class="logout-btn" type="button" (click)="onLogout()">Cerrar sesión</button>
+    }
+  </div>
+</nav>
+
+<router-outlet />

@@ -1,0 +1,21 @@
+# Build and cache
+dist
+out-tsc
+.angular
+coverage
+
+# Node
+node_modules
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE
+.vscode
+.idea
+.history
+
+# System
+.DS_Store
+Thumbs.db
+.env
