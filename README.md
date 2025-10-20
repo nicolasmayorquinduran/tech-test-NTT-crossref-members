@@ -10,7 +10,7 @@ Este proyecto está compuesto por múltiples aplicaciones independientes:
 - **host** (Angular - Puerto 4200): Aplicación principal que orquesta los MFEs
 - **login** (Angular - Puerto 4201): MFE de autenticación
 - **banner** (Angular - Puerto 4202): MFE de banner informativo
-- **members** (Angular - Puerto 4203): MFE de gestión de miembros
+- **member** (Angular - Puerto 4203): MFE de gestión de miembros
 - **libs**: Librería compartida (EventBus, GlobalState, servicios)
 
 ## 🚀 Inicio Rápido con Docker
@@ -20,31 +20,21 @@ Este proyecto está compuesto por múltiples aplicaciones independientes:
 - Docker Desktop instalado y ejecutándose
 - Git
 
-### Levantar toda la aplicación
+### Levantar toda la aplicación (docker compose)
 
 ```bash
 # Clonar el repositorio
 git clone https://github.com/nicolasmayorquinduran/tech-test-NTT-crossref-members.git
 cd tech-test-NTT-crossref-members
 
-# Construir la imagen (primera vez tomará varios minutos)
-docker build -t ntt-mfe-app .
-
-# Ejecutar el contenedor con todos los servicios
-docker run -d \
-  -p 3001:3001 \
-  -p 4200:4200 \
-  -p 4201:4201 \
-  -p 4202:4202 \
-  -p 4203:4203 \
-  --name ntt-app \
-  ntt-mfe-app
+# Construir y levantar todos los servicios (API + MFEs)
+docker compose up -d --build
 
 # Ver logs en tiempo real
-docker logs -f ntt-app
+docker compose logs -f
 ```
 
-> **Nota:** El primer build puede tardar 5-10 minutos ya que instala dependencias y construye la librería compartida. El contenedor ejecuta todos los servicios en modo desarrollo.
+> **Nota:** El primer build puede tardar 5-10 minutos. El proceso construye primero `libs` y luego cada MFE con NGINX, y la API en una imagen separada.
 
 ### Acceder a las aplicaciones
 
@@ -53,21 +43,24 @@ Una vez levantados los contenedores, puedes acceder a:
 - **Host Application**: http://localhost:4200
 - **Login MFE**: http://localhost:4201
 - **Banner MFE**: http://localhost:4202
-- **Members MFE**: http://localhost:4203
+- **Member MFE**: http://localhost:4203
 - **API + Swagger**: http://localhost:3001/docs
 
 ### Detener los servicios
 
 ```bash
 # Detener todos los servicios
-docker-compose down
+docker compose down
 
 # Detener y eliminar volúmenes
-docker-compose down -v
+docker compose down -v
 
 # Reconstruir las imágenes
-docker-compose build --no-cache
-docker-compose up -d
+docker compose build --no-cache
+docker compose up -d
+
+# Reconstruir un servicio específico (ejemplo: login)
+docker compose build --no-cache login && docker compose up -d login
 ```
 
 ## 💻 Desarrollo Local (Sin Docker)
@@ -92,7 +85,7 @@ cd libs && pnpm install && pnpm build && cd ..
 cd host && pnpm install && cd ..
 cd login && pnpm install && cd ..
 cd banner && pnpm install && cd ..
-cd members && pnpm install && cd ..
+cd member && pnpm install && cd ..
 ```
 
 ### Levantar servicios en desarrollo
@@ -130,9 +123,9 @@ cd banner
 pnpm start
 ```
 
-**Terminal 5 - Members MFE:**
+**Terminal 5 - Member MFE:**
 ```bash
-cd members
+cd member
 pnpm start
 ```
 
@@ -150,8 +143,8 @@ cd login && pnpm test
 # Banner
 cd banner && pnpm test
 
-# Members
-cd members && pnpm test
+# Member
+cd member && pnpm test
 ```
 
 ## 📁 Estructura del Proyecto
@@ -162,7 +155,7 @@ ntt/
 ├── host/             # Angular Host Shell (Puerto 4200)
 ├── login/            # Angular Login MFE (Puerto 4201)
 ├── banner/           # Angular Banner MFE (Puerto 4202)
-├── members/          # Angular Members MFE (Puerto 4203)
+├── member/           # Angular Member MFE (Puerto 4203)
 ├── libs/             # Librería compartida
 ├── docker-compose.yml
 └── README.md
@@ -181,7 +174,7 @@ Los MFEs se comunican usando:
 - [Host README](./host/README.md)
 - [Login README](./login/README.md)
 - [Banner README](./banner/README.md)
-- [Members README](./members/README.md)
+- [Member README](./member/README.md)
 - [Libs README](./libs/README.md)
 
 ## Estructura y Repositorios Individuales (Historial de Commits)
@@ -194,15 +187,15 @@ Si deseas inspeccionar el historial de desarrollo detallado (commit history) de 
 - [Host](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-host)
 - [Login](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-login)
 - [Banner](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-banner)
-- [Members](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-member)
+- [Member](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-remote-member)
 - [Libs](https://github.com/nicolasmayorquinduran/tech-test-NTT-mfe-libs)
 
 ## 🐛 Troubleshooting
 
 ### Los MFEs no cargan en el Host
 
-1. Verifica que todos los servicios estén corriendo: `docker-compose ps`
-2. Verifica los logs: `docker-compose logs -f`
+1. Verifica que todos los servicios estén corriendo: `docker compose ps`
+2. Verifica los logs: `docker compose logs -f`
 3. Asegúrate de que no haya conflictos de puertos
 
 ### Error de CORS
@@ -216,9 +209,9 @@ Si usas otros puertos, actualiza `api/src/main.ts`
 ### Rebuild después de cambios
 
 ```bash
-docker-compose down
-docker-compose build --no-cache
-docker-compose up -d
+docker compose down
+docker compose build --no-cache
+docker compose up -d
 ```
 ---
 

@@ -34,6 +34,8 @@ RUN pnpm install \
 # Etapa 2: MFE Runtime (Para Microfrontends - NGINX)
 # ----------------------------------------------------------------------
 FROM nginx:alpine as mfe-runtime
+ARG APP_NAME
+ENV APP_NAME=${APP_NAME}
 
 # 1. Copiar configuración de NGINX
 # Reemplazar la configuración por defecto con nuestro nginx.conf
