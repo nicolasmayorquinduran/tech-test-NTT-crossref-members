@@ -1,0 +1,69 @@
+Tengo que desarrollar la siguiente prueba tecnica:
+
+Prueba Técnica – Desarrollador Frontend – MFE Angular
+Se requiere crear una aplicación basada en arquitectura de
+microfrontends, desarrollada con Angular 20 y utilizando el plugin oficial
+'@angular-architects/module-federation'.
+El objetivo es construir una POC (Proof of Concept) compuesta por un
+host y tres microfrontends: banner, login y home. El host será responsable
+de la orquestación y el enrutamiento, mientras que los microfrontends
+implementarán funcionalidades independientes que se comunican entre
+sí a través de signals.
+Como plus, se solicita integrar una API pública (por ejemplo, PokeAPI o
+Simpsons API) para demostrar la capacidad de consumo de servicios
+externos dentro de alguno de los microfrontends, preferiblemente en el
+módulo de 'home'.
+Estructura General del Proyecto
+La aplicación estará compuesta por los siguientes proyectos:
+MFE Descripción Tipo
+host Aplicación contenedora que
+orquesta los microfrontends y
+maneja el estado global.
+
+Host
+
+banner Microfrontend que muestra una
+imagen o mensaje dinámico.
+
+Remote
+
+login Microfrontend que gestiona
+autenticación y persistencia de
+datos del usuario.
+
+Remote
+
+home Microfrontend que muestra la
+información del usuario
+logueado e integra una API
+pública.
+
+Remote
+
+Prueba Técnica – Desarrollador Frontend – MFE Angular
+Requisitos Técnicos
+El proyecto deberá desarrollarse utilizando Angular 20 y configurarse
+mediante el plugin '@angular-architects/module-federation'. El
+orquestador (host) debe cargar dinámicamente los microfrontends
+remotos, compartiendo signals globales para la comunicación de datos
+del usuario.
+Requisitos principales:
+• - Framework: Angular 20 LTS
+• - angular-architects/module-federation
+• - Orquestación: Module Federation con Webpack 5.
+• - Comunicación entre apps: Signals, librería cache, @input, @output.
+• - Persistencia: signal persistente.
+• - Ruteo: RouterModule con rutas remotas cargadas dinámicamente.
+• - Testing: Vitest con Angular Testing Library.
+• - Integración de API pública (PokeAPI, Simpsons API, etc.).
+• - Documentación clara en README.md.
+Pruebas Unitarias con Vitest
+Cada microfrontend debe contener pruebas unitarias que validen su
+funcionalidad principal. Por ejemplo, el login debe verificar que se
+guarden correctamente los datos en cache, y el home debe probar el
+renderizado de la información del usuario desde las signals.
+Extras (Opcionales)
+• - Microfrontend adicional (por ejemplo: perfil o configuración).
+
+
+
