@@ -45,6 +45,7 @@ services:
       target: mfe-runtime
       args:
         APP_NAME: member
+        DIST_DIR: members
     ports:
       - "4203:80"
     restart: always

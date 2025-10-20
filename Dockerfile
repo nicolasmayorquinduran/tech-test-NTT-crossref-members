@@ -35,7 +35,9 @@ RUN pnpm install \
 # ----------------------------------------------------------------------
 FROM nginx:alpine as mfe-runtime
 ARG APP_NAME
+ARG DIST_DIR
 ENV APP_NAME=${APP_NAME}
+ENV DIST_DIR=${DIST_DIR:-$APP_NAME}
 
 # 1. Copiar configuración de NGINX
 # Reemplazar la configuración por defecto con nuestro nginx.conf
@@ -44,9 +46,9 @@ RUN rm -rf /etc/nginx/conf.d
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # 2. Copiar Archivos de Construcción
-# Copiar el resultado de la construcción (la carpeta 'dist/<app_name>')
+# Copiar el resultado de la construcción (la carpeta 'dist/<dist_dir>')
 # Esto debe coincidir con la salida de tu proceso de compilación de Angular/Microfrontend.
-COPY --from=builder /app/${APP_NAME}/dist/${APP_NAME} /usr/share/nginx/html
+COPY --from=builder /app/${APP_NAME}/dist/${DIST_DIR} /usr/share/nginx/html
 
 # Exponer el puerto 80 (puerto por defecto de NGINX)
 EXPOSE 80
